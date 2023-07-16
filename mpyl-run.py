@@ -24,7 +24,7 @@ def main(log: Logger, args: argparse.Namespace):
     params = MpylRunParameters(
         run_config=MpylRunConfig(config=config, run_properties=run_properties),
         parameters=MpylCliParameters(
-            local=False,
+            local=True,
             tag=args.tag,
             pull_main=True,
             verbose=args.verbose,
