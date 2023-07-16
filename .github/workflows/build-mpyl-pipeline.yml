@@ -18,3 +18,9 @@ jobs:
 
       - name: Check Health
         run: pipenv run health
+
+      - name: Run build
+        run: pipenv run run
+        env:
+          PR_NUMBER: 1234
+          MPYL_CONFIG_PATH: mpyl_config.yml
