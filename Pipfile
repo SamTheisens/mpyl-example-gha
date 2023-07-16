@@ -11,4 +11,4 @@ python_version = "3.9"
 
 [scripts]
 health = "mpyl health"
-run = "python mpyl-run.py --dryrun --all"
+run = "python mpyl-run.py --local --dryrun --all"

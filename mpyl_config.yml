@@ -5,9 +5,6 @@ cvs:
   github:
     repository: 'acme/repo'
     token: !ENV ${GITHUB_TOKEN}
-    app:
-      privateKeyBase64Encoded: !ENV ${MPYL_GITHUB_APP_PRIVATE_KEY}
-      appId: '295700'
 slack:
   botToken: !ENV ${SLACK_TOKEN}
   icons:
@@ -58,7 +55,6 @@ whiteLists:
     - name: 'K8s-Test'
       values: [ '1.2.3.0', '1.2.3.1' ]
 kubernetes:
-  simulation: false
   rancher:
     cluster:
       test:

@@ -7,7 +7,6 @@ from pathlib import Path
 
 
 def main(log: Logger, args: argparse.Namespace):
-    from mpyl.reporting.targets.jira import JiraReporter
     from mpyl.steps.models import RunProperties
     from mpyl.utilities.pyaml_env import parse_config
     from mpyl.cli.commands.build.mpyl import (
@@ -25,7 +24,7 @@ def main(log: Logger, args: argparse.Namespace):
     params = MpylRunParameters(
         run_config=MpylRunConfig(config=config, run_properties=run_properties),
         parameters=MpylCliParameters(
-            local=args.local,
+            local=False,
             tag=args.tag,
             pull_main=True,
             verbose=args.verbose,
@@ -34,14 +33,10 @@ def main(log: Logger, args: argparse.Namespace):
         ),
     )
     check = None
-    slack_channel = None
-    slack_personal = None
-    jira = None
     github_comment = None
 
     if not args.local:
         from mpyl.reporting.targets.github import CommitCheck
-        from mpyl.reporting.targets.slack import SlackReporter
         from mpyl.steps.run import RunResult
         from mpyl.reporting.targets.github import PullRequestReporter
         from mpyl.reporting.targets.jira import compose_build_status
@@ -54,36 +49,14 @@ def main(log: Logger, args: argparse.Namespace):
             config=config,
             compose_function=compose_build_status,
         )
-        slack_channel = SlackReporter(
-            config=config,
-            channel="#project-mpyl-notifications",
-            versioning_identifier=run_properties.versioning.identifier,
-            target=run_properties.target,
-        )
-
-        if run_properties.details.user_email:
-            slack_personal = SlackReporter(
-                config=config,
-                channel=None,
-                versioning_identifier=run_properties.versioning.identifier,
-                target=run_properties.target,
-            )
-
-        jira = JiraReporter(
-            config=config, branch=run_properties.versioning.branch, logger=log
-        )
         accumulator.add(
             check.send_report(RunResult(run_properties=run_properties, run_plan={}))
         )
 
-    run_result = run_mpyl(params, slack_personal)
+    run_result = run_mpyl(params, None)
 
     if not args.local:
         accumulator.add(check.send_report(run_result))
-        accumulator.add(slack_channel.send_report(run_result))
-        if slack_personal:
-            slack_personal.send_report(run_result)
-        accumulator.add(jira.send_report(run_result))
         accumulator.add(github_comment.send_report(run_result))
         if accumulator.failures:
             log.warning(
