@@ -4,18 +4,22 @@ import os
 import sys
 from logging import Logger
 from pathlib import Path
+from mpyl.steps.models import RunProperties
+from mpyl.utilities.pyaml_env import parse_config
+from mpyl.cli.commands.build.mpyl import (
+    run_mpyl,
+    MpylRunParameters,
+    MpylRunConfig,
+    MpylCliParameters,
+)
+from mpyl.reporting.targets.github import CommitCheck
+from mpyl.steps.run import RunResult
+from mpyl.reporting.targets.github import PullRequestReporter
+from mpyl.reporting.targets.jira import compose_build_status
+from mpyl.reporting.targets import ReportAccumulator
 
 
 def main(log: Logger, args: argparse.Namespace):
-    from mpyl.steps.models import RunProperties
-    from mpyl.utilities.pyaml_env import parse_config
-    from mpyl.cli.commands.build.mpyl import (
-        run_mpyl,
-        MpylRunParameters,
-        MpylRunConfig,
-        MpylCliParameters,
-    )
-
     config = parse_config(Path(os.environ.get("MPYL_CONFIG_PATH", "mpyl_config.yml")))
     properties = parse_config(Path("run_properties.yml"))
     run_properties = RunProperties.from_configuration(
@@ -36,12 +40,6 @@ def main(log: Logger, args: argparse.Namespace):
     github_comment = None
 
     if not args.local:
-        from mpyl.reporting.targets.github import CommitCheck
-        from mpyl.steps.run import RunResult
-        from mpyl.reporting.targets.github import PullRequestReporter
-        from mpyl.reporting.targets.jira import compose_build_status
-        from mpyl.reporting.targets import ReportAccumulator
-
         check = CommitCheck(config=config, logger=log)
         accumulator = ReportAccumulator()
 
