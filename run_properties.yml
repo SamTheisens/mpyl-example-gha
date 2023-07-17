@@ -15,7 +15,7 @@ build:
     tag: !ENV ${TAG_NAME}
   console:
     logLevel: INFO
-    width: 0
+    width: 160
 stages:
   - name: 'build'
     icon: '🏗️'
