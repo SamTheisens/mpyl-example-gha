@@ -32,6 +32,12 @@ jobs:
           report_paths: 'projects/**/*test*/*.xml'
           annotate_only: true
 
+      - name: Upload inflated helm charts
+        uses: actions/upload-artifact@v3
+        with:
+          name: inflated-helm-charts
+          path: projects/**/template.yml
+
       - name: Clean up
         if: always()
         run: pipenv run clean
