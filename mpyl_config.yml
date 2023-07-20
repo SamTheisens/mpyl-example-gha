@@ -22,6 +22,8 @@ docker:
     organization: 'SamTheisens'
     userName: !ENV ${DOCKER_REGISTRY_USR:docker_user}
     password: !ENV ${DOCKER_REGISTRY_PSW:docker_password}
+    cache:
+      cacheFromRegistry: true
   build:
     rootFolder: '.'
     buildTarget: 'builder'
