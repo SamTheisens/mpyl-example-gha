@@ -19,9 +19,18 @@ jobs:
       - name: Check Health
         run: pipenv run health
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io/SamTheisens
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run build
         run: pipenv run run
         env:
+          DOCKER_REGISTRY_USR: ${{ github.actor }}
+          DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: 1234
           MPYL_CONFIG_PATH: mpyl_config.yml
 

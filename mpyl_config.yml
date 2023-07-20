@@ -18,7 +18,7 @@ jira:
   ticketPattern: '[A-Za-z]{2,}-\d+'
 docker:
   registry:
-    hostName: 'acme.docker.com'
+    hostName: 'ghcr.io/SamTheisens'
     userName: !ENV ${DOCKER_REGISTRY_USR:docker_user}
     password: !ENV ${DOCKER_REGISTRY_PSW:docker_password}
   build:
