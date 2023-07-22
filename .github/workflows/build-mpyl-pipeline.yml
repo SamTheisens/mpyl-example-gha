@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: inflated-helm-charts
-          path: projects/**/template.yml
+          path: projects/**/chart/**
 
       - name: Clean up
         if: always()
