@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Demonstrates how an SBT project can be built and tested
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: sbtservice
+      app.kubernetes.io/name: sbtservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: sbtservice
+        app.kubernetes.io/version: pr-1234
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: sbtservice
+        app.kubernetes.io/instance: sbtservice
+        maintainers: MPyL
+        maintainer: MPyL
+        version: pr-1234
+      name: sbtservice
+    spec:
+      containers:
+      - env: []
+        image: ghcr.io/samtheisens/sbtservice:pr-1234
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 99
+          httpGet:
+            path: /health
+            port: port-0
+          periodSeconds: 30
+          successThreshold: 0
+          timeoutSeconds: 20
+        name: sbtservice
+        ports:
+        - containerPort: 8080
+          name: port-0
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 512Mi
+      serviceAccount: sbtservice
+      serviceAccountName: sbtservice

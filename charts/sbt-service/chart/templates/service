@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: Demonstrates how an SBT project can be built and tested
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  ports:
+  - name: 8080-webservice-port
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/instance: sbtservice
+    app.kubernetes.io/name: sbtservice
+  type: ClusterIP

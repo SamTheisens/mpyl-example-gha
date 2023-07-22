@@ -1,0 +1,28 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  routes:
+  - kind: Rule
+    match: Host(`sbtservice-1234.test.nl`)
+    services:
+    - name: sbtservice
+      kind: Service
+      port: 8080
+    middlewares:
+    - name: sbtservice-ingress-0-whitelist
+    - name: traefik-https-redirect@kubernetescrd
+  entryPoints:
+  - websecure
+  tls:
+    secretName: le-prod-wildcard-cert
