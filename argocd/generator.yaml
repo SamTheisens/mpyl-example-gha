@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mpyl-gh-example
+spec:
+  generators:
+    - pullRequest:
+        github:
+          owner: SamTheisens
+          repo: mpyl-gha-example
+          tokenRef:
+            key: token
+            secretName: github-token
+        requeueAfterSeconds: 60
+  template:
+    metadata:
+      name: 'preview-{{number}}'
+    spec:
+      destination:
+        namespace: 'pr-{{number}}'
+        server: 'https://kubernetes.default.svc'
+      project: default
+      source:
+        path: argocd/charts/job/chart
+        repoURL: 'https://github.com/SamTheisens/mpyl-gha-example.git'
+        targetRevision: HEAD
+        helm:
+          ignoreMissingValueFiles: true
+          releaseName: pr-{{number}}
+      syncPolicy:
+        automated:
+          selfHeal: true
