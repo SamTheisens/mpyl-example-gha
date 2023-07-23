@@ -21,9 +21,9 @@ spec:
         server: 'https://kubernetes.default.svc'
       project: default
       source:
-        path: argocd/charts/job/chart
+        path: argocd/charts
         repoURL: 'https://github.com/SamTheisens/mpyl-gha-example.git'
-        targetRevision: HEAD
+        targetRevision: '{{head_sha}}'
         helm:
           ignoreMissingValueFiles: true
           releaseName: pr-{{number}}

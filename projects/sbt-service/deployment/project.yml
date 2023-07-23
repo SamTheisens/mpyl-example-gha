@@ -28,19 +28,6 @@ deployment:
           all: 0.5
         mem:
           all: 1024
-    metrics:
-      enabled: true
-      alerts:
-      - name: 'ServiceError'
-        expr: 'true'
-        forDuration: '1m'
-        description: 'Service has encountered errors'
-        severity: 'warning'
-      - name: 'ServiceErrorCritical'
-        expr: 'true'
-        forDuration: '1m'
-        description: 'Service has encountered critical errors'
-        severity: 'critical'
   traefik:
     hosts:
       - host:
