@@ -3,6 +3,8 @@ on:
   push:
     branches-ignore: [ 'main' ]
 
+permissions: write-all
+
 jobs:
   build-pipeline:
     runs-on: ubuntu-latest
@@ -22,6 +24,8 @@ jobs:
       - name: Run build
         run: pipenv run run
         env:
+          DOCKER_REGISTRY_USR: ${{ github.actor }}
+          DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: 1234
           MPYL_CONFIG_PATH: mpyl_config.yml
 
@@ -36,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: inflated-helm-charts
-          path: projects/**/template.yml
+          path: projects/**/chart/**
 
       - name: Clean up
         if: always()

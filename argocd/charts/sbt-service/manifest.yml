@@ -1,0 +1,162 @@
+---
+# Source: sbtservice/templates/service-account
+apiVersion: v1
+imagePullSecrets:
+- name: bigdataregistry
+kind: ServiceAccount
+metadata:
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+---
+# Source: sbtservice/templates/service
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: Demonstrates how an SBT project can be built and tested
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  ports:
+  - name: 8080-webservice-port
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/instance: sbtservice
+    app.kubernetes.io/name: sbtservice
+  type: ClusterIP
+---
+# Source: sbtservice/templates/deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Demonstrates how an SBT project can be built and tested
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: sbtservice
+      app.kubernetes.io/name: sbtservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: sbtservice
+        app.kubernetes.io/version: pr-1234
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: sbtservice
+        app.kubernetes.io/instance: sbtservice
+        maintainers: MPyL
+        maintainer: MPyL
+        version: pr-1234
+      name: sbtservice
+    spec:
+      containers:
+      - env: []
+        image: ghcr.io/samtheisens/sbtservice:pr-1234
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 99
+          httpGet:
+            path: /health
+            port: port-0
+          periodSeconds: 30
+          successThreshold: 0
+          timeoutSeconds: 20
+        name: sbtservice
+        ports:
+        - containerPort: 8080
+          name: port-0
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 512Mi
+      serviceAccount: sbtservice
+      serviceAccountName: sbtservice
+---
+# Source: sbtservice/templates/ingress-https-route
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice
+spec:
+  routes:
+  - kind: Rule
+    match: Host(`sbtservice-1234.test.nl`)
+    services:
+    - name: sbtservice
+      kind: Service
+      port: 8080
+    middlewares:
+    - name: sbtservice-ingress-0-whitelist
+    - name: traefik-https-redirect@kubernetescrd
+  entryPoints:
+  - websecure
+  tls:
+    secretName: le-prod-wildcard-cert
+---
+# Source: sbtservice/templates/sbtservice-ingress-0-whitelist
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  annotations:
+    VPN: 10.0.0.1
+  labels:
+    name: sbtservice
+    app.kubernetes.io/version: pr-1234
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sbtservice
+    app.kubernetes.io/instance: sbtservice
+    maintainers: MPyL
+    maintainer: MPyL
+    version: pr-1234
+  name: sbtservice-ingress-0-whitelist
+spec:
+  ipWhiteList:
+    sourceRange:
+    - 10.0.0.1

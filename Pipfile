@@ -9,7 +9,7 @@ verify_ssl = true
 name = "testpypi"
 
 [packages]
-mpyl = {version = "==163.1782", index = "testpypi"}
+mpyl = {version = "==163.1874", index = "testpypi"}
 
 [requires]
 python_version = "3.9"
@@ -17,4 +17,4 @@ python_version = "3.9"
 [scripts]
 clean = "mpyl build clean"
 health = "mpyl health"
-run = "python mpyl-run.py --local --dryrun --all"
+run = "python mpyl-run.py --local --all"

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mpyl-gha-demo
+spec:
+  destination:
+    name: ''
+    namespace: example-mpyl-app
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: argocd/charts
+    repoURL: 'https://github.com/SamTheisens/mpyl-gha-example.git'
+    targetRevision: main
+    directory:
+      recurse: true
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -18,9 +18,12 @@ jira:
   ticketPattern: '[A-Za-z]{2,}-\d+'
 docker:
   registry:
-    hostName: 'acme.docker.com'
+    hostName: 'ghcr.io'
+    organization: 'SamTheisens'
     userName: !ENV ${DOCKER_REGISTRY_USR:docker_user}
     password: !ENV ${DOCKER_REGISTRY_PSW:docker_password}
+    cache:
+      cacheFromRegistry: true
   build:
     rootFolder: '.'
     buildTarget: 'builder'
@@ -55,7 +58,7 @@ whiteLists:
     - name: 'K8s-Test'
       values: [ '1.2.3.0', '1.2.3.1' ]
 kubernetes:
-  simulate: true
+  renderTemplates: true
   rancher:
     cluster:
       test:
