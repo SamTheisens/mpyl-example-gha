@@ -5,12 +5,12 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: pr-2
+    namespace: example-mpyl-app
     server: 'https://kubernetes.default.svc'
   source:
     path: argocd/charts
     repoURL: 'https://github.com/SamTheisens/mpyl-gha-example.git'
-    targetRevision: feature/TECH-XXX-github-actions-publish-images
+    targetRevision: main
     directory:
       recurse: true
   sources: []
