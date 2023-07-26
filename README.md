@@ -3,7 +3,7 @@
 
 Demonstrates the use of MPyL with github actions as a runner
 
-![run](documentation/build-run.png)]
+![run](documentation/build-run.png)
 
 ## Usage
 

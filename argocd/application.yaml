@@ -8,7 +8,7 @@ spec:
     namespace: example-mpyl-app
     server: 'https://kubernetes.default.svc'
   source:
-    path: argocd/charts
+    path: argocd/manifests
     repoURL: 'https://github.com/SamTheisens/mpyl-gha-example.git'
     targetRevision: main
     directory:
