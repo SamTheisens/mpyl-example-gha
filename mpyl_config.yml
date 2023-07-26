@@ -5,17 +5,6 @@ cvs:
   github:
     repository: 'acme/repo'
     token: !ENV ${GITHUB_TOKEN}
-slack:
-  botToken: !ENV ${SLACK_TOKEN}
-  icons:
-    building: '60fps_parrot'
-    success: 'thug-parrot'
-    failure: 'sadparrot'
-jira:
-  site: 'https://acme.atlassian.net'
-  userName: !ENV ${MPYL_JIRA_TOKEN_USR:jira_user}
-  password: !ENV ${MPYL_JIRA_TOKEN_PSW:jira_password}
-  ticketPattern: '[A-Za-z]{2,}-\d+'
 docker:
   registry:
     hostName: 'ghcr.io'
@@ -32,12 +21,6 @@ docker:
   compose:
     periodSeconds: 2
     failureThreshold: 20
-jenkins:
-  url: 'https://acme.infra.nl/'
-  pipelines:
-    some-pipeline: 'Acme Pipeline - Main'
-    mpyl-test: 'MPyL Pipeline - Test'
-  defaultPipeline: 'mpyl-test'
 sbt:
   command: 'sbt'
   clientCommand: 'sbtn'
@@ -59,23 +42,6 @@ whiteLists:
       values: [ '1.2.3.0', '1.2.3.1' ]
 kubernetes:
   renderTemplates: true
-  rancher:
-    cluster:
-      test:
-        clusterId: c-acme
-        projectId: p-acme
-        clusterEnv: test
-        context: acme-k8s-test
-      acceptance:
-        clusterId: c-acme
-        projectId: p-acme
-        clusterEnv: acce
-        context: acme-k8s-acce
-      production:
-        clusterId: c-acme
-        projectId: p-lb52t
-        clusterEnv: prd
-        context: acme-k8s-prod
 project: # default values
   allowedMaintainers: [ 'Team1', 'Team2', 'MPyL' ]
   deployment:
