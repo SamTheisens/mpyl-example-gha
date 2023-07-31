@@ -8,6 +8,10 @@ permissions: write-all
 jobs:
   build-pipeline:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REGISTRY_USR: ${{ github.actor }}
+      DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
+      MPYL_CONFIG_PATH: mpyl_config.yml
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -24,13 +28,13 @@ jobs:
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
+      - name: Show build status
+        run: pipenv run status
+
       - name: Run build
         run: pipenv run run-ci
         env:
-          DOCKER_REGISTRY_USR: ${{ github.actor }}
-          DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-          MPYL_CONFIG_PATH: mpyl_config.yml
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
@@ -49,5 +53,4 @@ jobs:
         if: always()
         run: pipenv run clean
         env:
-          PR_NUMBER: 1234
-          MPYL_CONFIG_PATH: mpyl_config.yml
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}

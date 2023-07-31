@@ -12,11 +12,6 @@ from mpyl.cli.commands.build.mpyl import (
     MpylRunConfig,
     MpylCliParameters,
 )
-from mpyl.reporting.targets.github import CommitCheck
-from mpyl.steps.run import RunResult
-from mpyl.reporting.targets.github import PullRequestReporter
-from mpyl.reporting.targets.jira import compose_build_status
-from mpyl.reporting.targets import ReportAccumulator
 
 
 def main(log: Logger, args: argparse.Namespace):
@@ -30,37 +25,15 @@ def main(log: Logger, args: argparse.Namespace):
         parameters=MpylCliParameters(
             local=False,
             tag=args.tag,
-            pull_main=True,
+            pull_main=False,
             verbose=args.verbose,
             all=args.all,
             target=run_properties.target.value,
         ),
     )
-    check = None
-    github_comment = None
 
-    if not args.local:
-        check = CommitCheck(config=config, logger=log)
-        accumulator = ReportAccumulator()
-
-        github_comment = PullRequestReporter(
-            config=config,
-            compose_function=compose_build_status,
-        )
-        accumulator.add(
-            check.send_report(RunResult(run_properties=run_properties, run_plan={}))
-        )
-
+    log.info("Starting build...")
     run_result = run_mpyl(params, None)
-
-    if not args.local:
-        accumulator.add(check.send_report(run_result))
-        accumulator.add(github_comment.send_report(run_result))
-        if accumulator.failures:
-            log.warning(
-                f'Failed to send the following report(s): {", ".join(accumulator.failures)}'
-            )
-            sys.exit(1)
 
     sys.exit(0 if run_result.is_success else 1)
 
