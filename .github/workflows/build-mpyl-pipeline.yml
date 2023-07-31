@@ -13,7 +13,11 @@ jobs:
       DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
       MPYL_CONFIG_PATH: mpyl_config.yml
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -21,6 +25,9 @@ jobs:
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
       - run: pipenv install
+
+      - name: Get tags
+        run: git fetch --tags origin
 
       - name: Check Health
         run: pipenv run health
