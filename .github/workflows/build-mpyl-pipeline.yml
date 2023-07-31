@@ -25,7 +25,7 @@ jobs:
         id: findPr
 
       - name: Run build
-        run: pipenv run run
+        run: pipenv run run-ci
         env:
           DOCKER_REGISTRY_USR: ${{ github.actor }}
           DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}

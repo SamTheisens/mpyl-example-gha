@@ -18,3 +18,5 @@ python_version = "3.9"
 clean = "mpyl build clean"
 health = "mpyl health"
 run = "python mpyl-run.py --local --all"
+run-ci = "python mpyl-run.py"
+
