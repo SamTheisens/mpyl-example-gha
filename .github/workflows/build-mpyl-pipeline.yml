@@ -21,12 +21,15 @@ jobs:
       - name: Check Health
         run: pipenv run health
 
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
       - name: Run build
         run: pipenv run run
         env:
           DOCKER_REGISTRY_USR: ${{ github.actor }}
           DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: 1234
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           MPYL_CONFIG_PATH: mpyl_config.yml
 
       - name: Publish Test Report

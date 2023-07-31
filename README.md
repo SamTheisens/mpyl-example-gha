@@ -1,4 +1,4 @@
-# mpyl-gha-example
+# mpyl-example-gha
 [![build](https://github.com/SamTheisens/mpyl-gha-example/actions/workflows/build-mpyl-pipeline.yml/badge.svg)](https://github.com/SamTheisens/mpyl-gha-example/actions/workflows/build-mpyl-pipeline.yml)
 
 Demonstrates the use of [MPyL](https://vandebron.github.io/mpyl/mpyl.html) with github actions as CI runner and [ArgoCD](https://argoproj.github.io/cd/) as CD tool.
