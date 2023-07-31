@@ -9,7 +9,7 @@ verify_ssl = true
 name = "testpypi"
 
 [packages]
-mpyl = {version = "==174.1953", index = "testpypi"}
+mpyl = {version = "==174.1957", index = "testpypi"}
 
 [requires]
 python_version = "3.9"
