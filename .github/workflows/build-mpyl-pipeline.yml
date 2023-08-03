@@ -14,18 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 65535
-
-      - name: fetch main
-        run: git fetch origin main:refs/remotes/origin/main
-
-      - name: Rev parse main
-        run: git rev-parse origin/main
-
-      - name: show log
-        run: git log --all --decorate --oneline --graph
-
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -39,6 +27,36 @@ jobs:
 
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
+
+      - name: Show refs
+        run: git show-ref
+
+      - name: Show log
+        run: git log --oneline --no-abbrev-commit
+
+      - name: Show status again
+        run: pipenv run repo
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+
+      - name: Init repo
+        run: pipenv run repo-init
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+
+      - name: Show refs
+        run: git show-ref
+
+      - name: Show log
+        run: git log --oneline --no-abbrev-commit
+
+      - name: Show diff
+        run: git diff --name-only 96b6be3d121ff1651506da3d6330f7df13c7a959 HEAD
+
+      - name: Show status again
+        run: pipenv run repo
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
 
       - name: Show status
         run: pipenv run status
