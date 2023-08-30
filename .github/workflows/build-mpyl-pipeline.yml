@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          cache: 'pip,pipenv'
+          cache: 'pipenv'
 #        run: pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple mpyl==185.2250
 
       - name: Install
