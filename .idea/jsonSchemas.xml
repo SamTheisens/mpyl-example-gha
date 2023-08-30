@@ -19,6 +19,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="mpyl_config.yml">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="mpyl_config.yml" />
+              <option name="relativePathToSchema" value="../mpyl/src/mpyl/schema/mpyl_config.schema.yml" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="mpyl_config.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>
