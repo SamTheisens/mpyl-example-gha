@@ -23,6 +23,9 @@ jobs:
         run: mpyl repo init -b ${{ github.ref }} -u https://${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -p
 
       - name: Repo status
+        run: mpyl health
+
+      - name: Repo status
         run: mpyl repo status
 
       - name: Build status
