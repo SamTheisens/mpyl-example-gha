@@ -9,7 +9,9 @@ jobs:
   build-pipeline:
     runs-on: ubuntu-latest
     env:
-      MPYL_VERSION: 241.2784
+      MPYL_VERSION: "249.2864"
+      DOCKER_REGISTRY_USR: ${{ github.actor }}
+      DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/setup-python@v4
         with:
@@ -22,8 +24,8 @@ jobs:
       - name: Initialize repo
         run: mpyl repo init -b ${{ github.ref }} -u https://${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -p
 
-      - name: Repo status
-        run: mpyl health
+      - name: MPyL health
+        run: mpyl health --ci
 
       - name: Repo status
         run: mpyl repo status
@@ -31,5 +33,35 @@ jobs:
       - name: Build status
         run: mpyl build status
 
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        if: github.ref_name != 'main'
+        with:
+          state: open
+
+      - name: Pull cache
+        env:
+          ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
+        run: mpyl artifacts -v pull --pr_number ${{ steps.findPr.outputs.pr }} --path cache
+
+      - name: Build status after pull
+        run: mpyl build status
+
       - name: Build run
-        run: mpyl build run
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
+        run: mpyl build run --ci
+
+      - name: Push manifests
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
+        run: mpyl artifacts -v push --pr_number ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
+
+      - name: Push cache
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
+        run: mpyl artifacts -v push --pr_number ${{ steps.findPr.outputs.pr }} --path cache --artifact-type cache

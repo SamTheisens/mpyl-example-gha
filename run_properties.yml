@@ -34,7 +34,7 @@ build:
   parameters:
     deploy_target: !ENV ${DEPLOY_TARGET:PullRequest}
   versioning:
-    revision: !ENV ${GIT_COMMIT}
+    revision: !ENV ${GITHUB_SHA}
     branch: !ENV ${CHANGE_BRANCH}
     pr_number: !ENV ${PR_NUMBER}
     tag: !ENV ${TAG_NAME}
