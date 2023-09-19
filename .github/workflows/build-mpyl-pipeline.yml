@@ -43,7 +43,7 @@ jobs:
       - name: Pull cache
         env:
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl artifacts -v pull --pr_number ${{ steps.findPr.outputs.pr }} --path cache
+        run: mpyl artifacts pull --pr_number ${{ steps.findPr.outputs.pr }} --path cache
 
       - name: Build status after pull
         run: mpyl build status
@@ -58,10 +58,10 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl artifacts -v push --pr_number ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
+        run: mpyl artifacts push --pr_number ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
 
       - name: Push cache
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl artifacts -v push --pr_number ${{ steps.findPr.outputs.pr }} --path cache --artifact-type cache
+        run: mpyl artifacts push --pr_number ${{ steps.findPr.outputs.pr }} --path cache --artifact-type cache
