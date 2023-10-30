@@ -42,6 +42,8 @@ whiteLists:
       all: ['0.0.0.0/0']
     - name: 'K8s-Test'
       all: ['1.2.3.0', '1.2.3.1']
+kubernetes:
+  deployAction: KubectlManifest
 project: # default values
   allowedMaintainers: ['Team1', 'Team2', 'MPyL']
   deployment:
