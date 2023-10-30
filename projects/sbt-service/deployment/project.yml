@@ -1,11 +1,13 @@
 name: 'sbtservice'
-maintainer: [ 'MPyL' ]
+maintainer: ['MPyL']
 stages:
   build: Sbt Build
   test: Sbt Test
   deploy: Kubernetes Deploy
+mpylVersion: 1.0.10
 description: 'Demonstrates how an SBT project can be built and tested'
 deployment:
+  namespace: 'sbtservice'
   properties:
     env:
       - key: SOME_ENV

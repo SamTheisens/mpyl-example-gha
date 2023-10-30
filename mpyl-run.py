@@ -4,19 +4,19 @@ import os
 import sys
 from logging import Logger
 from pathlib import Path
-from mpyl.steps.models import RunProperties
-from mpyl.utilities.pyaml_env import parse_config
-from mpyl.cli.commands.build.mpyl import (
+from typing import Optional
+
+from mpyl.build import (
     run_mpyl,
-    MpylRunParameters,
-    MpylRunConfig,
     MpylCliParameters,
 )
+from mpyl.reporting.targets import ReportAccumulator, Reporter
 from mpyl.reporting.targets.github import CommitCheck
-from mpyl.steps.run import RunResult
 from mpyl.reporting.targets.github import PullRequestReporter
 from mpyl.reporting.targets.jira import compose_build_status
-from mpyl.reporting.targets import ReportAccumulator
+from mpyl.steps.models import RunProperties
+from mpyl.steps.run import RunResult
+from mpyl.utilities.pyaml_env import parse_config
 
 
 def main(log: Logger, args: argparse.Namespace):
@@ -25,19 +25,16 @@ def main(log: Logger, args: argparse.Namespace):
     run_properties = RunProperties.from_configuration(
         run_properties=properties, config=config
     )
-    params = MpylRunParameters(
-        run_config=MpylRunConfig(config=config, run_properties=run_properties),
-        parameters=MpylCliParameters(
-            local=False,
-            tag=args.tag,
-            pull_main=True,
-            verbose=args.verbose,
-            all=args.all,
-            target=run_properties.target.value,
-        ),
+
+    cli_parameters = MpylCliParameters(
+        local=False,
+        tag=args.tag,
+        pull_main=True,
+        verbose=args.verbose,
+        all=args.all,
     )
-    check = None
-    github_comment = None
+    check: Optional[Reporter] = None
+    github_comment: Optional[Reporter] = None
 
     if not args.local:
         check = CommitCheck(config=config, logger=log)
@@ -51,7 +48,11 @@ def main(log: Logger, args: argparse.Namespace):
             check.send_report(RunResult(run_properties=run_properties, run_plan={}))
         )
 
-    run_result = run_mpyl(params, None)
+    run_result = run_mpyl(
+        run_properties=run_properties,
+        cli_parameters=cli_parameters,
+        reporter=None,
+    )
 
     if not args.local:
         accumulator.add(check.send_report(run_result))
