@@ -1,4 +1,5 @@
-cvs:
+mpylVersion: 1.3.0
+vcs:
   git:
     mainBranch: 'main'
     ignorePatterns: ['*.md', '*.svg']
@@ -6,13 +7,14 @@ cvs:
     repository: 'acme/repo'
     token: !ENV ${GITHUB_TOKEN}
 docker:
-  registry:
-    hostName: 'ghcr.io'
-    organization: 'SamTheisens'
-    userName: !ENV ${DOCKER_REGISTRY_USR:docker_user}
-    password: !ENV ${DOCKER_REGISTRY_PSW:docker_password}
-    cache:
-      cacheFromRegistry: true
+  defaultRegistry: 'ghcr.io'
+  registries:
+    - hostName: 'ghcr.io'
+      organization: 'SamTheisens'
+      userName: !ENV ${DOCKER_REGISTRY_USR:docker_user}
+      password: !ENV ${DOCKER_REGISTRY_PSW:docker_password}
+      cache:
+        cacheFromRegistry: true
   build:
     rootFolder: '.'
     buildTarget: 'builder'
@@ -32,18 +34,16 @@ sbt:
     build: false
     test: false
 whiteLists:
-  default: [ "VPN" ]
+  default: ["VPN"]
   addresses:
     - name: "VPN"
-      values: [ "10.0.0.1" ]
+      all: ["10.0.0.1"]
     - name: 'Outside-World'
-      values: [ '0.0.0.0/0' ]
+      all: ['0.0.0.0/0']
     - name: 'K8s-Test'
-      values: [ '1.2.3.0', '1.2.3.1' ]
-kubernetes:
-  renderTemplates: true
+      all: ['1.2.3.0', '1.2.3.1']
 project: # default values
-  allowedMaintainers: [ 'Team1', 'Team2', 'MPyL' ]
+  allowedMaintainers: ['Team1', 'Team2', 'MPyL']
   deployment:
     kubernetes:
       job:
@@ -96,4 +96,4 @@ project: # default values
             all: "le-custom-prod-wildcard-cert"
           insecure: false
           whitelists:
-            all: [ "VPN" ]
+            all: ["VPN"]
