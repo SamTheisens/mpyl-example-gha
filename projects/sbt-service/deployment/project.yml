@@ -20,6 +20,8 @@ deployment:
         all: /health
       successThreshold: 0
       failureThreshold: 99
+    metrics:
+      enabled: false
     portMappings:
       8080: 8080
     resources:
