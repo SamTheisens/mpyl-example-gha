@@ -9,7 +9,7 @@ verify_ssl = true
 name = "testpypi"
 
 [packages]
-mpyl = {version = "==285.3188", index = "testpypi"}
+mpyl = {version = "==285.3310", index = "testpypi"}
 pydantic = "==1.10.10"
 
 [dev-packages]

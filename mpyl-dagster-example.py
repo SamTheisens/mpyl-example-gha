@@ -10,10 +10,10 @@ from dagster import (
     Failure,
     job,
 )
-
 from mpyl.project import load_project, Project
 from mpyl.stages.discovery import find_invalidated_projects_for_stage
 from mpyl.steps import build, test, deploy
+from mpyl.steps.collection import StepsCollection
 from mpyl.steps.models import RunProperties
 from mpyl.steps.steps import Steps, StepResult
 from mpyl.utilities.pyaml_env import parse_config
@@ -82,7 +82,7 @@ def find_projects(stage: str) -> list[DynamicOutput[Project]]:
         map(lambda p: load_project(Path("."), Path(p), strict=False), project_paths)
     )
     invalidated = find_invalidated_projects_for_stage(
-        all_projects, stage, changes_in_branch
+        all_projects, stage, changes_in_branch, StepsCollection(get_dagster_logger())
     )
     return list(
         map(
