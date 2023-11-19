@@ -9,7 +9,7 @@ jobs:
   build-pipeline:
     runs-on: ubuntu-latest
     env:
-      MPYL_VERSION: "1.4.0"
+      MPYL_VERSION: "295.3352"
       DOCKER_REGISTRY_USR: ${{ github.actor }}
       DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -19,7 +19,7 @@ jobs:
 
       - name: Install MPyL
         continue-on-error: true
-        run: pip install mpyl==${{ env.MPYL_VERSION }}
+        run: pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple mpyl==${{ env.MPYL_VERSION }}
 
       - name: Initialize repo
         run: mpyl repo init -b ${{ github.ref }} -u https://${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -p
@@ -58,7 +58,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
+        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type argo
 
       - name: Push cache
         env:

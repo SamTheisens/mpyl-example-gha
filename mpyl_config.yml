@@ -6,7 +6,17 @@ vcs:
   github:
     repository: 'acme/repo'
     token: !ENV ${GITHUB_TOKEN}
-  artifactRepository:
+  argoGithub:
+    repository: 'SamTheisens/mpyl-example-argocd'
+    token: !ENV ${ARGOCD_GITHUB_TOKEN}
+  argoRepository:
+    mainBranch: 'main'
+    remote:
+      url: 'https://github.com/SamTheisens/mpyl-example-argocd.git'
+      userName: SamTheisens
+      password: !ENV ${ARGOCD_GITHUB_TOKEN}
+      email: 1911436+SamTheisens@users.noreply.github.com
+  cachingRepository:
     mainBranch: 'main'
     remote:
       url: 'https://github.com/SamTheisens/mpyl-example-argocd.git'

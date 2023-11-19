@@ -3,6 +3,22 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
+        <entry key="Mpyl config">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Mpyl config" />
+              <option name="relativePathToSchema" value="../mpyl/src/mpyl/schema/mpyl_config.schema.yml" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="mpyl_config.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="applicationset-crd">
           <value>
             <SchemaInfo>
