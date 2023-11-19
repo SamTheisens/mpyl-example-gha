@@ -58,7 +58,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
+        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type argo
 
       - name: Push cache
         env:
