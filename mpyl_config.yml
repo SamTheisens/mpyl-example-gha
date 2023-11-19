@@ -13,6 +13,13 @@ vcs:
       userName: SamTheisens
       password: !ENV ${ARGOCD_GITHUB_TOKEN}
       email: 1911436+SamTheisens@users.noreply.github.com
+  cacheRepository:
+    mainBranch: 'main'
+    remote:
+      url: 'https://github.com/SamTheisens/mpyl-example-argocd.git'
+      userName: SamTheisens
+      password: !ENV ${ARGOCD_GITHUB_TOKEN}
+      email: 1911436+SamTheisens@users.noreply.github.com
 docker:
   defaultRegistry: 'ghcr.io'
   registries:
