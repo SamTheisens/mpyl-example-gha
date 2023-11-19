@@ -9,7 +9,7 @@ jobs:
   build-pipeline:
     runs-on: ubuntu-latest
     env:
-      MPYL_VERSION: "295.3345"
+      MPYL_VERSION: "295.3346"
       DOCKER_REGISTRY_USR: ${{ github.actor }}
       DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
     steps:
