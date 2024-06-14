@@ -55,4 +55,3 @@ deployment:
       - host:
           all: "Host(`some.other.host.com`)"
         servicePort: 4091
-        priority: 1000
