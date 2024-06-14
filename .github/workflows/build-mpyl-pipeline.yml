@@ -21,6 +21,9 @@ jobs:
         continue-on-error: true
         run: pip install mpyl==${{ env.MPYL_VERSION }}
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
 #      - name: Initialize repo
 #        run: mpyl repo init -b ${{ github.ref }} -u https://${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -p
 
