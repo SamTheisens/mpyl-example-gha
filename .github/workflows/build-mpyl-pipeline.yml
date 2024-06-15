@@ -17,26 +17,18 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Manual checkout
+        run: git clone --shallow-exclude main --single-branch --branch ${{ github.ref_name }} https://github.com/SamTheisens/mpyl-gha-example.git $(pwd)
+
+      - name: Tag grafted root revision
+        run: git tag origin/main $(git log --pretty=format:"%H" | tail -n 1)
+
       - name: Install MPyL
         continue-on-error: true
         run: pip install mpyl==${{ env.MPYL_VERSION }}
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: 'origin/main'
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-#      - name: Initialize repo
-#        run: mpyl repo init -b ${{ github.ref }} -u https://${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -p
-
       - name: MPyL health
         run: mpyl health --ci
-
-#      - name: Repo status
-#        run: mpyl repo status
 
       - name: Build status
         run: mpyl build status
@@ -66,7 +58,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type manifests
+        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type argo
 
       - name: Push cache
         env:
