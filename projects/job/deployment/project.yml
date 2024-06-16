@@ -11,7 +11,10 @@ deployment:
   kubernetes:
     job:
       cron:
-        schedule: "0 22 * * *"
+        all:
+          schedule: "0 22 * * *"
+          timeZone: "Europe/Amsterdam"
+
 dependencies:
   test:
     - projects/service/file.py
