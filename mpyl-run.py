@@ -10,21 +10,21 @@ from mpyl.build import (
     run_mpyl,
     MpylCliParameters,
 )
+
 from mpyl.reporting.targets import ReportAccumulator, Reporter
 from mpyl.reporting.targets.github import CommitCheck
 from mpyl.reporting.targets.github import PullRequestReporter
 from mpyl.reporting.targets.jira import compose_build_status
 from mpyl.steps.models import RunProperties
 from mpyl.steps.run import RunResult
+from mpyl.steps.run_properties import construct_run_properties
 from mpyl.utilities.pyaml_env import parse_config
 
 
 def main(log: Logger, args: argparse.Namespace):
     config = parse_config(Path(os.environ.get("MPYL_CONFIG_PATH", "mpyl_config.yml")))
     properties = parse_config(Path("run_properties.yml"))
-    run_properties = RunProperties.from_configuration(
-        run_properties=properties, config=config
-    )
+    run_properties = construct_run_properties(config = config, properties=properties)
 
     cli_parameters = MpylCliParameters(
         local=False,
