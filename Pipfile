@@ -15,6 +15,10 @@ mpyl = {version = "==451.4230", index = "testpypi"}
 python_version = "3.9"
 
 [scripts]
+#dagster = "dagster dev -f mpyl-dagster-example.py -d /tmp/dagster"
 clean = "mpyl build clean"
 health = "mpyl health"
 run = "python mpyl-run.py --local --all"
+
+[dev-packages]
+dagster = "==1.8.7"

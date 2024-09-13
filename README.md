@@ -17,3 +17,12 @@ Demonstrates the use of [MPyL](https://vandebron.github.io/mpyl/mpyl.html) with 
 2. Create a new application in argocd.
    This can be done via the argoCD gui `+ New app` -> `Edit as yaml` -> paste the contents of [argocd/application.yaml](argocd/application.yaml) -> `Create`
 3. You can then deploy the application by clicking `Sync` in the argoCD gui
+
+## Local build with dagster
+
+Run the following command to build the dagster pipeline:
+
+```bash
+pipenv run dagster
+```
+And launch a new run via the GUI.
