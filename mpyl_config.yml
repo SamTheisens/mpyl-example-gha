@@ -152,3 +152,12 @@ project: # default values
           insecure: false
           whitelists:
             all: ["VPN"]
+    additionalTraefikRoutes:
+      - name: "ingress-intracloud-https"
+        middlewares:
+          - "intracloud-middleware@kubernetescrd"
+        entrypoints:
+          - "intracloud"
+    traefikDefaults:
+      httpMiddleware: "traefik-https-redirect@kubernetescrd"
+      tls: "le-custom-prod-wildcard-cert"
