@@ -4,16 +4,13 @@ import os
 import sys
 from logging import Logger
 from pathlib import Path
-from typing import Optional
 
 from mpyl.build import (
-    run_mpyl,
     MpylCliParameters,
+    run_mpyl,
 )
-
 from mpyl.reporting.targets import ReportAccumulator, Reporter
-from mpyl.reporting.targets.github import CommitCheck
-from mpyl.reporting.targets.github import PullRequestReporter
+from mpyl.reporting.targets.github import CommitCheck, PullRequestReporter
 from mpyl.reporting.targets.jira import compose_build_status
 from mpyl.steps.run import RunResult
 from mpyl.steps.run_properties import construct_run_properties
@@ -34,8 +31,8 @@ def main(log: Logger, args: argparse.Namespace):
         verbose=args.verbose,
         all=args.all,
     )
-    check: Optional[Reporter] = None
-    github_comment: Optional[Reporter] = None
+    check: Reporter | None = None
+    github_comment: Reporter | None = None
 
     if not args.local:
         check = CommitCheck(config=config, logger=log)
@@ -108,7 +105,7 @@ if __name__ == "__main__":
         color_system="256",
     )
     logging.basicConfig(
-        level="INFO",
+        level="DEBUG",
         format=FORMAT,
         datefmt="[%X]",
         handlers=[
