@@ -25,6 +25,9 @@ deployment:
         acceptance: "Acceptance"
         production: "Production"
   kubernetes:
+    rancher:
+      projectId:
+        all: "p-11111"
     livenessProbe:
       path:
         all: /health

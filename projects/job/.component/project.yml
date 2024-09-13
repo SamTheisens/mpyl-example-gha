@@ -9,6 +9,9 @@ stages:
 deployment:
   namespace: job
   kubernetes:
+    rancher:
+      projectId:
+        all: "p-11111"
     job:
       cron:
         all:

@@ -25,7 +25,7 @@ jobs:
 
       - name: Install MPyL
         continue-on-error: true
-        run: pip install mpyl==${{ env.MPYL_VERSION }}
+        run: pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple mpyl==451.4230
 
       - name: MPyL health
         run: mpyl health --ci
@@ -46,7 +46,7 @@ jobs:
         run: mpyl build artifacts pull --pr ${{ steps.findPr.outputs.pr }} --path cache
 
       - name: Build status after pull
-        run: mpyl build status
+        run: mpyl build -v status
 
       - name: Build run
         env:
