@@ -1,6 +1,6 @@
 name: kong-sync
 maintainer: ['MPyL']
-description: 'Deployment of Kong config syncer'
+description: 'Deployment of Kong config'
 mpylVersion: 1.0.10
 stages:
   build: Docker Build
