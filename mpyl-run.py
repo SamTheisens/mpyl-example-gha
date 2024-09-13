@@ -15,10 +15,11 @@ from mpyl.reporting.targets import ReportAccumulator, Reporter
 from mpyl.reporting.targets.github import CommitCheck
 from mpyl.reporting.targets.github import PullRequestReporter
 from mpyl.reporting.targets.jira import compose_build_status
-from mpyl.steps.models import RunProperties
 from mpyl.steps.run import RunResult
 from mpyl.steps.run_properties import construct_run_properties
 from mpyl.utilities.pyaml_env import parse_config
+from rich.console import Console
+from rich.logging import RichHandler
 
 
 def main(log: Logger, args: argparse.Namespace):
@@ -98,6 +99,22 @@ if __name__ == "__main__":
         action="store_true",
     )
     FORMAT = "%(name)s  %(message)s"
+    logging.raiseExceptions = False
+    console = Console(
+        markup=False,
+        width=200,
+        no_color=False,
+        log_path=False,
+        color_system="256",
+    )
+    logging.basicConfig(
+        level="INFO",
+        format=FORMAT,
+        datefmt="[%X]",
+        handlers=[
+            RichHandler(markup=False, console=console, show_path=False)
+        ],
+    )
 
     parsed_args = parser.parse_args()
     mpl_logger = logging.getLogger("mpyl")
