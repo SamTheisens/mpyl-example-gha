@@ -46,7 +46,7 @@ jobs:
         run: mpyl build artifacts pull --pr ${{ steps.findPr.outputs.pr }} --path cache
 
       - name: Build status after pull
-        run: mpyl build status
+        run: mpyl build -v status
 
       - name: Build run
         env:
