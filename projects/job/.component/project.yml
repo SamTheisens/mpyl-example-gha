@@ -8,10 +8,10 @@ stages:
   deploy: "Kubernetes Job Deploy"
 deployment:
   namespace: job
-  rancher:
-    projectId:
-      all: "p-11111"
   kubernetes:
+    rancher:
+      projectId:
+        all: "p-11111"
     job:
       cron:
         all:
