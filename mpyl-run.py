@@ -4,6 +4,7 @@ import os
 import sys
 from logging import Logger
 from pathlib import Path
+from typing import Optional
 
 from mpyl.build import (
     MpylCliParameters,
@@ -12,11 +13,43 @@ from mpyl.build import (
 from mpyl.reporting.targets import ReportAccumulator, Reporter
 from mpyl.reporting.targets.github import CommitCheck, PullRequestReporter
 from mpyl.reporting.targets.jira import compose_build_status
+from mpyl.steps import Step, Meta, ArtifactType, Input, Output
 from mpyl.steps.run import RunResult
 from mpyl.steps.run_properties import construct_run_properties
 from mpyl.utilities.pyaml_env import parse_config
+from mpyl.utilities.subprocess import custom_check_output
 from rich.console import Console
 from rich.logging import RichHandler
+
+def run_gradle(logger: Logger, target: str, task: str) -> Output:
+    return custom_check_output(
+        logger=logger, command=f"./gradlew {target}:{task} --no-daemon -PmavenUser=$MAVEN_USER -PmavenPassword=$MAVEN_PASSWORD --info",
+        use_print=True
+    )
+
+class BuildGradle(Step):
+    def __init__(self, logger: Logger) -> None:
+        super().__init__(
+            logger,
+            Meta(
+                name="Gradle Build",
+                description="Build a gradle target",
+                version="0.0.1",
+                stage='build',
+            ),
+            produced_artifact=ArtifactType.NONE,
+            required_artifact=ArtifactType.NONE,
+        )
+
+    def execute(self, step_input: Input) -> Output:
+        name = step_input.project_execution.name
+        self._logger.info(f"Building project {name}")
+        project_name = str(step_input.project_execution.project.root_path).replace("/", ':')
+        self._logger.warning(f"Building path {project_name}")
+
+        run_outcome = run_gradle(self._logger, project_name, "bootJar")
+
+        return Output(success=run_outcome.success, message=f"Built {name}", produced_artifact=None)
 
 
 def main(log: Logger, args: argparse.Namespace):
@@ -31,8 +64,8 @@ def main(log: Logger, args: argparse.Namespace):
         verbose=args.verbose,
         all=args.all,
     )
-    check: Reporter | None = None
-    github_comment: Reporter | None = None
+    check: Optional[Reporter] = None
+    github_comment: Optional[Reporter] = None
 
     if not args.local:
         check = CommitCheck(config=config, logger=log)
@@ -105,7 +138,7 @@ if __name__ == "__main__":
         color_system="256",
     )
     logging.basicConfig(
-        level="DEBUG",
+        level="INFO",
         format=FORMAT,
         datefmt="[%X]",
         handlers=[
