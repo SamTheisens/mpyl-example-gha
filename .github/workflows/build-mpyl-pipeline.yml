@@ -13,25 +13,37 @@ jobs:
       DOCKER_REGISTRY_USR: ${{ github.actor }}
       DOCKER_REGISTRY_PSW: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
       - name: Manual checkout
         run: git clone --shallow-exclude main --single-branch --branch ${{ github.ref_name }} https://github.com/SamTheisens/mpyl-gha-example.git $(pwd)
 
       - name: Tag grafted root revision
         run: git tag origin/main $(git log --pretty=format:"%H" | tail -n 1)
 
-      - name: Install MPyL
-        continue-on-error: true
-        run: pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple mpyl==451.4230
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pipenv'
+          cache-dependency-path: |
+            Pipfile.lock
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: pipenv install -d
 
       - name: MPyL health
-        run: mpyl health --ci
+        run: pipenv run mpyl health --ci
 
       - name: Build status
-        run: mpyl build status
+        run: pipenv run mpyl build status
 
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -43,25 +55,25 @@ jobs:
       - name: Pull cache
         env:
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts pull --pr ${{ steps.findPr.outputs.pr }} --path cache
+        run: pipenv run mpyl build artifacts pull --pr ${{ steps.findPr.outputs.pr }} --path cache
 
       - name: Build status after pull
-        run: mpyl build -v status
+        run: pipenv run mpyl build -v status
 
       - name: Build run
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build run --ci
+        run: pipenv run run
 
       - name: Push manifests
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type argo
+        run: pipenv run mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path manifests --artifact-type argo
 
       - name: Push cache
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
-        run: mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path cache --artifact-type cache
+        run: pipenv run mpyl build artifacts push --pr ${{ steps.findPr.outputs.pr }} --path cache --artifact-type cache

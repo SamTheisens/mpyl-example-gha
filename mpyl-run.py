@@ -4,6 +4,7 @@ import os
 import sys
 from logging import Logger
 from pathlib import Path
+from typing import Optional
 
 from mpyl.build import (
     MpylCliParameters,
@@ -31,8 +32,8 @@ def main(log: Logger, args: argparse.Namespace):
         verbose=args.verbose,
         all=args.all,
     )
-    check: Reporter | None = None
-    github_comment: Reporter | None = None
+    check: Optional[Reporter] = None
+    github_comment: Optional[Reporter] = None
 
     if not args.local:
         check = CommitCheck(config=config, logger=log)
@@ -105,7 +106,7 @@ if __name__ == "__main__":
         color_system="256",
     )
     logging.basicConfig(
-        level="DEBUG",
+        level="INFO",
         format=FORMAT,
         datefmt="[%X]",
         handlers=[
