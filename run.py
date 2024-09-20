@@ -8,4 +8,4 @@ IPluginRegistry.plugins.append(BuildGradle)
 IPluginRegistry.plugins.append(TestGradle)
 
 add_commands()
-main_group(["build", "-c", "mpyl_config.yml", "run", "--all"], standalone_mode=False)
+main_group(["build", "-c", "mpyl_config.yml", "run", "--ci"], standalone_mode=False)
